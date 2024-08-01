@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Students</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #e6d3c8;
+            color: rgb(85, 0, 43);
+        }
+        .rounded.border.p-4 {
+            background-color: #f5f5dc;
+            color: rgb(85, 0, 43);
+            border: 2px solid rgb(85, 0, 43);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .rounded.border.p-4 h1 {
+            font-weight: bold;
+            color: rgb(85, 0, 43);
+            text-align: center;
+        }
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .student-table th, .student-table td {
+            border: 1px solid rgb(85, 0, 43);
+            padding: 10px;
+            text-align: center;
+        }
+        .student-table th {
+            background-color: #f5f5dc;
+            color: rgb(85, 0, 43);
+            font-weight: bold;
+        }
+        .student-table td {
+            background-color: #fff;
+        }
+        a.btn-link {
+            color: rgb(85, 0, 43);
+            text-decoration: none;
+        }
+        a.btn-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="rounded border p-4">
+        <h1>Students</h1>
+        <table class="student-table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="student : ${students}">
+                    <td th:text="${student.firstName}"></td>
+                    <td th:text="${student.lastName}"></td>
+                    <td th:text="${student.email}"></td>
+                    <td>
+                        <a th:href="@{/student/{id}(id=${student.id})}" class="btn btn-link">View Courses</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<a href="/secretaries/index" class="btn btn-link"> Home</a>
+</body>
+</html>

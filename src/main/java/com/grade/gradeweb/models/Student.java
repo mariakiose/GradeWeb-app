@@ -1,0 +1,49 @@
+package com.grade.gradeweb.models;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.MapKeyJoinColumn;
+import jakarta.persistence.Table;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Entity
+@Table(name = "students")
+public class Student extends AppUser {
+   
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @JoinTable(name = "student_courses", joinColumns = @JoinColumn(name = "student_id"))
+    @MapKeyJoinColumn(name = "course_id")
+    private Map<Course, Grade> courses = new HashMap<>();
+
+    public Student(Long id, String firstName, String lastName, String email,String password, String address, String phone) {
+        this.setId(id);
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setEmail(email);
+        this.setPassword(password);
+        this.setAddress(address);
+        this.setPhone(phone);
+        this.setRole("STUDENT"); // Setting the role specifically for Student
+    }
+
+    public Student() {
+        this.setRole("STUDENT");
+    }
+
+ 
+    public Map<Course, Grade> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Map<Course, Grade> courses) {
+        this.courses = courses;
+    }
+}
