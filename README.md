@@ -25,7 +25,8 @@ The primary purpose of the application is to streamline the management of studen
                 Green Color: Courses that have been passed.
                 Red Color: Courses that have been failed.
           Statistics: Student can view how many courses each student has passed and their average grade.
-        Secretary Staff
+      
+      Secretary Staff
            Grade Input: Secretary staff can enter grades for each student and each course.
 
 
@@ -34,6 +35,7 @@ The primary purpose of the application is to streamline the management of studen
         1) On the index, select "Register."
         2) Fill in the required fields and choose your role (Secretary Staff or Student).
         3) Complete the registration process.
+    
     Login:
         1) On the index, select "Login."
         2) Enter your credentials and log in to the application.
