@@ -19,12 +19,12 @@ The primary purpose of the application is to streamline the management of studen
 
   # User Roles 
       Student
-          Course Registration: Students can register for the courses they are attending.
-          Waiting for Grades: Students wait for their grades for the registered courses.
-          Course Overview:
+          1) Course Registration: Students can register for the courses they are attending.
+          2) Waiting for Grades: Students wait for their grades for the registered courses.
+          3) Course Overview:
                 Green Color: Courses that have been passed.
                 Red Color: Courses that have been failed.
-          Statistics: Student can view how many courses each student has passed and their average grade.
+          4) Statistics: Student can view how many courses each student has passed and their average grade.
       
       Secretary Staff
            Grade Input: Secretary staff can enter grades for each student and each course.
