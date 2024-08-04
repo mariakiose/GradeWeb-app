@@ -1,7 +1,5 @@
 # GradeWeb-app
-GradeWeb - README
 
-# Introduction
 GradeWeb is an application designed for the effective management of student grades. It focuses on facilitating the recording and tracking of student progress while providing an easy-to-use mechanism for inputting and monitoring grades by the secretary staff.
 
 
