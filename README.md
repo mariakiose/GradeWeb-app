@@ -42,5 +42,8 @@ The primary purpose of the application is to streamline the management of studen
     Students: Register for your courses and wait for your grades.
     Secretary Staff: Input grades for students and track their progress through the statistics.
 
+# Technologies Used
+Programming Language: Java, Framework: Spring Boot, Dependency Managment: Maven.
+
 # Notes
 The project  is open to improvements and extensions.
