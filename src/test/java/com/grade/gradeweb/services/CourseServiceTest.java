@@ -22,6 +22,8 @@ public class CourseServiceTest {
 
     @InjectMocks
     private CourseService courseService;
+    
+    
 
     @Mock
     private CourseRepository courseRepository;
@@ -43,7 +45,7 @@ public class CourseServiceTest {
         when(courseRepository.findAll()).thenReturn(courses);
 
         // Act
-        List<Course> result = courseService.getCources();
+        List<Course> result = courseService.findAllCources();
 
         // Assert
         assertNotNull(result);

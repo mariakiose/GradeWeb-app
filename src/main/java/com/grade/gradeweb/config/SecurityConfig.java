@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .requestMatchers("/student_cources").authenticated()
                 .requestMatchers("//students/index").hasAuthority("STUDENT")
                 .requestMatchers("//secretaries/index").hasAuthority("SECRETARY")
+
                 
                 .anyRequest().authenticated()
             )

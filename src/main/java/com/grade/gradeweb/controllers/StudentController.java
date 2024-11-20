@@ -11,29 +11,27 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.grade.gradeweb.models.Course;
 import com.grade.gradeweb.models.Grade;
 import com.grade.gradeweb.models.Student;
-import com.grade.gradeweb.repositories.CourseRepository;
-import com.grade.gradeweb.repositories.GradeRepository;
-import com.grade.gradeweb.repositories.StudentRepository;
+import com.grade.gradeweb.services.CourseService;
+import com.grade.gradeweb.services.StudentService;
 import com.grade.gradeweb.util.GradeUtils;
 
 @Controller
 public class StudentController {
-	 @Autowired
-	    private CourseRepository courseRepository;
+	 	
+	 	
+	 	@Autowired
+	 	private CourseService courseService;
+	 	
+	 	@Autowired
+	 	private StudentService studentService;
 
-	    @Autowired
-	    private StudentRepository studentRepository;
-
-	    @Autowired
-	    private GradeRepository gradeRepository;
-	    
-		@GetMapping(value = { "/students/index" })
+	 	
+	 	@GetMapping(value = { "/students/index" })
 		public String studentIndex() {
 	        return "students/index"; 
 	    }
@@ -42,7 +40,7 @@ public class StudentController {
 	    @PreAuthorize("isAuthenticated()")
 	    @GetMapping("/declaration")
 	    public String showDeclareCoursesPage(Model model) {
-	        List<Course> courses = courseRepository.findAll();
+	        List<Course> courses = courseService.findAllCources();
 	        model.addAttribute("courses", courses);
 	        return "declaration";
 	    }
@@ -51,32 +49,18 @@ public class StudentController {
 	    public String declareCourses(@RequestParam List<Long> courseIds, Model model) {
 	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	        String email = authentication.getName();
-	        Student student = studentRepository.findByEmail(email);
+	        Student student = studentService.findByEmail(email);
+	        studentService.saveStudent(student,courseIds);
+	      
 
-	        if (student != null) {
-	            for (Long courseId : courseIds) {
-	                Course course = courseRepository.findById(courseId).orElse(null);
-	                if (course != null && !student.getCourses().containsKey(course)) {
-	                    Grade grade = new Grade();
-	                    grade.setCourse(course);
-	                    grade.setStudent(student);
-	                    grade.setGradeValue(-1.0f); // Initial value for grade
-
-	                    student.getCourses().put(course, grade);
-	                    gradeRepository.save(grade);
-	                }
-	            }
-	            studentRepository.save(student);
-	        }
-
-	        List<Course> courses = courseRepository.findAll();
+	        List<Course> courses = courseService.findAllCources();
 	        model.addAttribute("courses", courses);
 	        return "declaration";
 	    }
 
 	    @PostMapping("/preview")
 	    public String previewCourses(@RequestParam List<Long> courseIds, Model model) {
-	        List<Course> selectedCourses = courseRepository.findAllById(courseIds);
+	        List<Course> selectedCourses = courseService.getCoursesByIds(courseIds);
 	        model.addAttribute("selectedCourses", selectedCourses);
 	        model.addAttribute("courseIds", courseIds);
 	        return "preview";
@@ -86,25 +70,11 @@ public class StudentController {
 	    public String saveCourses(@RequestParam List<Long> courseIds, Model model) {
 	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	        String email = authentication.getName();
-	        Student student = studentRepository.findByEmail(email);
+	        Student student = studentService.findByEmail(email);
 
-	        if (student != null) {
-	            for (Long courseId : courseIds) {
-	                Course course = courseRepository.findById(courseId).orElse(null);
-	                if (course != null && !student.getCourses().containsKey(course)) {
-	                    Grade grade = new Grade();
-	                    grade.setCourse(course);
-	                    grade.setStudent(student);
-	                    grade.setGradeValue(-1.0f); // Initial value for grade
-
-	                    student.getCourses().put(course, grade);
-	                    gradeRepository.save(grade);
-	                }
-	            }
-	            studentRepository.save(student);
-	        }
+	        studentService.saveStudent(student,courseIds);
 	        model.addAttribute("success", true); 
-	        List<Course> selectedCourses = courseRepository.findAllById(courseIds);
+	        List<Course> selectedCourses = courseService.getCoursesByIds(courseIds);
 	        model.addAttribute("selectedCourses", selectedCourses);
 	        return "preview";
 	    }
@@ -114,7 +84,7 @@ public class StudentController {
 	    public String showMyCourses(Model model) {
 	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	        String email = authentication.getName();
-	        Student student = studentRepository.findByEmail(email);
+	        Student student = studentService.findByEmail(email);
 
 	        if (student != null) {
 	            Map<Course, Grade> coursesWithGrades = student.getCourses();
@@ -130,6 +100,7 @@ public class StudentController {
 
 	        return "grades";
 	    }
+
 
 	
 }

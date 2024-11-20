@@ -1,5 +1,6 @@
 package com.grade.gradeweb.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,12 +18,11 @@ public class Grade {
 
     private float gradeValue;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Student student;
 
-    @ManyToOne
+    @ManyToOne 
     private Course course;
-    
     
     
     public Grade() {

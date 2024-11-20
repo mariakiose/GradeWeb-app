@@ -60,6 +60,7 @@
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Action</th>
+                    <th>Delete</th> 
                 </tr>
             </thead>
             <tbody>
@@ -67,14 +68,23 @@
                     <td th:text="${student.firstName}"></td>
                     <td th:text="${student.lastName}"></td>
                     <td th:text="${student.email}"></td>
+					<td>
+					       <a th:href="@{/student/{id}(id=${student.id})}" class="btn btn-link">View Courses</a>
+					</td>
                     <td>
-                        <a th:href="@{/student/{id}(id=${student.id})}" class="btn btn-link">View Courses</a>
+                        <!-- Delete button, only visible if the user has ROLE_SECRETARY -->
+                        <form th:action="@{/deleteStudent/{id}(id=${student.id})}" method="post" 
+                              th:if="${#authorization.expression('isAuthenticated() and hasAuthority(''ROLE_SECRETARY'')')}">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
-<a href="/secretaries/index" class="btn btn-link"> Home</a>
+
+<a href="/secretaries/index" class="btn btn-link">Home</a>
+
 </body>
 </html>

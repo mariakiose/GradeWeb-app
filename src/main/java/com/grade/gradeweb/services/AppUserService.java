@@ -1,5 +1,6 @@
 package com.grade.gradeweb.services;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +26,12 @@ public class AppUserService implements UserDetailsService {
     
     @Autowired
     private SecretaryRepository secretaryRepository;
+   
+
+    public AppUser findByEmail(String email) {
+    	 AppUser user =appUserRepository.findByEmail(email);
+    	 return user;
+    }
     
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

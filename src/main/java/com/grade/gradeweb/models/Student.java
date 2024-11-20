@@ -1,10 +1,9 @@
 package com.grade.gradeweb.models;
 
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.MapKeyJoinColumn;
@@ -21,6 +20,7 @@ public class Student extends AppUser {
     @ElementCollection(fetch = FetchType.EAGER)
     @JoinTable(name = "student_courses", joinColumns = @JoinColumn(name = "student_id"))
     @MapKeyJoinColumn(name = "course_id")
+    @Column(name = "grade_id", nullable = true)
     private Map<Course, Grade> courses = new HashMap<>();
 
     public Student(Long id, String firstName, String lastName, String email,String password, String address, String phone) {

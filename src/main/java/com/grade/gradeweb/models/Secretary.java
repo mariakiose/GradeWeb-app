@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -33,20 +32,15 @@ public class Secretary extends AppUser{
 	   private List<Course> courses = new ArrayList<>();
 
 
-
-
 	public List<Course> getCourses() {
 		return courses;
 	}
-
 
 
 	public void setCourses(List<Course> courses) {
 		this.courses = courses;
 	}
 
-    
-    
 
 
 }

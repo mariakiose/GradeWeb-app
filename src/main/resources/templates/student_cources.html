@@ -53,9 +53,11 @@
 <div class="container">
     <div class="rounded border p-4">
         <h1>Courses for Student <span th:text="${student.firstName} + ' ' + ${student.lastName}"></span></h1>
+        
         <div th:if="${errorMessage}">
             <p th:text="${errorMessage}" class="alert alert-danger"></p>
         </div>
+
         <div th:if="${not #lists.isEmpty(coursesWithGrades)}">
             <table class="course-table">
                 <thead>
@@ -82,11 +84,13 @@
                 </tbody>
             </table>
         </div>
+
         <div th:if="${#lists.isEmpty(coursesWithGrades)}">
             <p>No courses found for this student.</p>
         </div>
     </div>
 </div>
 <a href="/students" class="btn btn-link">Back to Students List</a>
+
 </body>
 </html>

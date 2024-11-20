@@ -14,13 +14,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.grade.gradeweb.models.AppUser;
 import com.grade.gradeweb.models.RegisterDto;
-import com.grade.gradeweb.repositories.AppUserRepository;
 import com.grade.gradeweb.services.AppUserService;
 
 public class AccountControllerTest {
 
-    @Mock
-    private AppUserRepository appUserRepository;
+  
 
     @Mock
     private AppUserService appUserService;
@@ -55,7 +53,7 @@ public class AccountControllerTest {
 
         // Simulate an existing user with the same email
         AppUser existingUser = new AppUser();
-        when(appUserRepository.findByEmail(registerDto.getEmail())).thenReturn(existingUser);
+        when(appUserService.findByEmail(registerDto.getEmail())).thenReturn(existingUser);
 
         // Execute the method
         String viewName = accountController.register(registerDto, bindingResult, model, redirectAttributes);

@@ -1,6 +1,7 @@
 package com.grade.gradeweb.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +21,16 @@ public class GradeService {
 	                .filter(g -> g.getStudent().equals(student))
 	                .collect(Collectors.toList());
 	    }
+	    
+	    public  Optional<Grade> findById(Long id){
+	    	Optional<Grade> gradeOpt = gradeRepository.findById(id);
+	    	return gradeOpt;
+	    }
+	    public void saveGrade(Optional<Grade> gradeOpt,Float gradeValue) {
+	    	if (gradeOpt.isPresent()) {
+                Grade grade = gradeOpt.get();
+                grade.setGradeValue(gradeValue);
+                gradeRepository.save(grade);
+            }
+	    }
 }
-

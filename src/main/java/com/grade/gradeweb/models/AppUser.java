@@ -21,7 +21,8 @@ import jakarta.persistence.Table;
 @Table(name="users")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class AppUser implements UserDetails  {
-	 @Id 
+	 
+	@Id 
 	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 @Column(name = "id")
 	 private Long id;

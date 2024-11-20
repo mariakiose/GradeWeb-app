@@ -3,7 +3,6 @@ package com.grade.gradeweb.models;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,10 +16,15 @@ public class Course {
     @ManyToOne
     private Secretary secretary;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Student> students = new ArrayList<>();
    
     public Course() {
+    }
+    public void removeStudent(Student student) {
+        if (this.students.contains(student)) {
+            this.students.remove(student);  
+        }
     }
     
     public Course(Long id, String courseName) {

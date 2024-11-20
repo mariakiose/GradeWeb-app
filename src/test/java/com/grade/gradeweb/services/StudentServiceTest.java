@@ -39,6 +39,7 @@ public class StudentServiceTest {
         assertNotNull(result);
         assertEquals(email, result.getEmail());
     }
+    
 
     @Test
     void testFindByEmail_studentNotFound() {

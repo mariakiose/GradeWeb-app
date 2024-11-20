@@ -3,8 +3,6 @@ package com.grade.gradeweb.controllers;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,13 +10,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.grade.gradeweb.models.AppUser;
 import com.grade.gradeweb.models.RegisterDto;
-import com.grade.gradeweb.repositories.AppUserRepository;
 import com.grade.gradeweb.services.AppUserService;
 
 import jakarta.validation.Valid;
@@ -26,8 +22,6 @@ import jakarta.validation.Valid;
 @Controller
 public class AccountController {
 
-    @Autowired
-    private AppUserRepository appUserRepository;
     
     @Autowired
     private AppUserService appUserService;
@@ -57,7 +51,7 @@ public class AccountController {
             return "register";
         }
 
-        AppUser existingUser = appUserRepository.findByEmail(registerDto.getEmail());
+        AppUser existingUser = appUserService.findByEmail(registerDto.getEmail());
         if (existingUser != null) {
             result.addError(new FieldError("registerDto", "email",
                     "Email address is already used"));

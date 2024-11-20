@@ -13,22 +13,18 @@ import org.springframework.ui.Model;
 import com.grade.gradeweb.models.Course;
 import com.grade.gradeweb.models.Grade;
 import com.grade.gradeweb.models.Student;
-import com.grade.gradeweb.repositories.GradeRepository;
-import com.grade.gradeweb.repositories.StudentRepository;
+import com.grade.gradeweb.services.GradeService;
+import com.grade.gradeweb.services.StudentService;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class SecretaryControllerTest {
 
     @Mock
-    private StudentRepository studentRepository;
+    private StudentService studentService;
 
     @Mock
-    private GradeRepository gradeRepository;
+    private GradeService gradeService;
 
     @Mock
     private Model model;
@@ -52,7 +48,7 @@ public class SecretaryControllerTest {
         // Test data
         List<Student> students = Arrays.asList(new Student(), new Student());
 
-        when(studentRepository.findAll()).thenReturn(students);
+        when(studentService.findAllStudents()).thenReturn(students);
 
         // Execute the method
         String viewName = secretaryController.showStudents(model);
@@ -69,7 +65,7 @@ public class SecretaryControllerTest {
         Map<Course, Grade> coursesWithGrades = new HashMap<>();
         student.setCourses(coursesWithGrades);
 
-        when(studentRepository.findById(studentId)).thenReturn(Optional.of(student));
+        when(studentService.findById(studentId)).thenReturn(Optional.of(student));
 
         String viewName = secretaryController.showStudentCourses(studentId, model);
 
@@ -82,7 +78,7 @@ public class SecretaryControllerTest {
     public void testShowStudentCourses_StudentNotFound() {
         Long studentId = 1L;
 
-        when(studentRepository.findById(studentId)).thenReturn(Optional.empty());
+        when(studentService.findById(studentId)).thenReturn(Optional.empty());
 
         String viewName = secretaryController.showStudentCourses(studentId, model);
 
@@ -93,17 +89,16 @@ public class SecretaryControllerTest {
     @Test
     public void testUpdateGrade() {
         Long gradeId = 1L;
-        Float gradeValue = 85.0F;
+        Float gradeValue = 8.0F;  // Valid grade
         Long studentId = 2L;
 
         Grade grade = new Grade();
-        when(gradeRepository.findById(gradeId)).thenReturn(Optional.of(grade));
+        when(gradeService.findById(gradeId)).thenReturn(Optional.of(grade));
 
-        String viewName = secretaryController.updateGrade(gradeId, gradeValue, studentId);
+        String viewName = secretaryController.updateGrade(gradeId, gradeValue, studentId, model);
 
         assertEquals("redirect:/student/" + studentId, viewName);
-        assertEquals(gradeValue, grade.getGradeValue(), 0.01); // Using delta for floating-point comparison
-        verify(gradeRepository).save(grade);
+        verify(gradeService).saveGrade(Optional.of(grade), gradeValue);
     }
 
     @Test
@@ -111,10 +106,37 @@ public class SecretaryControllerTest {
         Long gradeId = 1L;
         Long studentId = 2L;
 
-        String viewName = secretaryController.updateGrade(gradeId, null, studentId);
+        String viewName = secretaryController.updateGrade(gradeId, null, studentId, model);
 
         assertEquals("redirect:/student/" + studentId, viewName);
-        verify(gradeRepository, never()).findById(gradeId);
-        verify(gradeRepository, never()).save(any(Grade.class));
+        verify(gradeService, never()).findById(gradeId);
+        verify(gradeService, never()).saveGrade(any(), any());
+    }
+
+    @Test
+    public void testUpdateGrade_InvalidGradeValue() {
+        Long gradeId = 1L;
+        Float invalidGradeValue = 15.0F;  // Invalid grade
+        Long studentId = 2L;
+
+        String viewName = secretaryController.updateGrade(gradeId, invalidGradeValue, studentId, model);
+
+        assertEquals("student_cources", viewName);
+        verify(model).addAttribute("errorMessage", "Grade must be between 0 and 10.");
+        verify(gradeService, never()).saveGrade(any(), any());
+    }
+
+    @Test
+    public void testUpdateGrade_GradeNotFound() {
+        Long gradeId = 1L;
+        Float gradeValue = 8.0F;  // Valid grade
+        Long studentId = 2L;
+
+        when(gradeService.findById(gradeId)).thenReturn(Optional.empty());
+
+        String viewName = secretaryController.updateGrade(gradeId, gradeValue, studentId, model);
+
+        assertEquals("redirect:/student/" + studentId, viewName);
+        verify(model).addAttribute("errorMessage", "Grade not found.");
     }
 }

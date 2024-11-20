@@ -5,5 +5,4 @@ import com.grade.gradeweb.models.Course;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
 	//public Course findBycourseName(String courseName);
-
 }
