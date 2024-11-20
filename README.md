@@ -26,6 +26,7 @@ The primary purpose of the application is to streamline the management of studen
       
       Secretary Staff
            Grade Input: Secretary staff can enter grades for each student and each course.
+           Delete Students: Secretary staff can delete students if they are no longer needed.
 
 
 # User Instructions
