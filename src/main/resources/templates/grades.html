@@ -15,6 +15,7 @@
             border: 2px solid rgb(85, 0, 43);
             padding: 20px;
             margin-top: 20px;
+            position: relative;
         }
         .rounded.border.p-4 h1 {
             font-weight: bold;
@@ -50,6 +51,17 @@
             text-align: center;
             font-weight: bold;
         }
+        .home-button {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: rgb(85, 0, 43);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .home-button:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -77,12 +89,12 @@
             <p>Average :  <span th:text="${averageGrade}"></span></p>
             <p>Passed Courses: <span th:text="${passedCourses}"></span></p>
         </div>
+
+        <a th:href="${#authorization.expression('hasAuthority(''ROLE_STUDENT'')') ? '/students/index' : '/secretaries/index'}"
+           th:if="${#authorization.expression('isAuthenticated()')}"
+           class="home-button">Home</a>
     </div>
 </div>
-<div>
-    <a th:href="${#authorization.expression('hasAuthority(''ROLE_STUDENT'')') ? '/students/index' : '/secretaries/index'}"
-       th:if="${#authorization.expression('isAuthenticated()')}"
-       class="btn btn-link">Home</a>
-</div>
+
 </body>
 </html>

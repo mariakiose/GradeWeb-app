@@ -15,6 +15,8 @@
             border: 2px solid rgb(85, 0, 43);
             padding: 20px;
             margin-top: 20px;
+            position: relative;
+           
         }
         .rounded.border.p-4 h1 {
             font-weight: bold;
@@ -44,6 +46,18 @@
             text-decoration: none;
         }
         a.btn-link:hover {
+            text-decoration: underline;
+        }
+        .back-student-list-button {
+			display: block;
+			margin-top: 20px;
+            bottom: 10px; 
+            left: 10px; 
+            color: rgb(85, 0, 43);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-student-list-button:hover {
             text-decoration: underline;
         }
     </style>
@@ -88,9 +102,10 @@
         <div th:if="${#lists.isEmpty(coursesWithGrades)}">
             <p>No courses found for this student.</p>
         </div>
+        
+        <a href="/students" class="back-student-list-button">Back to Students List</a>
     </div>
 </div>
-<a href="/students" class="btn btn-link">Back to Students List</a>
 
 </body>
 </html>

@@ -26,6 +26,11 @@ public class AccountController {
     @Autowired
     private AppUserService appUserService;
 
+    @GetMapping("/login")
+    public String login() {
+        return "login"; 
+    }
+
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("registerDto", new RegisterDto());

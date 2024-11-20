@@ -46,6 +46,16 @@
         a.btn-link:hover {
             text-decoration: underline;
         }
+        .home-button {
+            display: block;
+            margin-top: 20px;
+            color: rgb(85, 0, 43);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .home-button:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -68,9 +78,9 @@
                     <td th:text="${student.firstName}"></td>
                     <td th:text="${student.lastName}"></td>
                     <td th:text="${student.email}"></td>
-					<td>
-					       <a th:href="@{/student/{id}(id=${student.id})}" class="btn btn-link">View Courses</a>
-					</td>
+                    <td>
+                        <a th:href="@{/student/{id}(id=${student.id})}" class="btn btn-link">View Courses</a>
+                    </td>
                     <td>
                         <!-- Delete button, only visible if the user has ROLE_SECRETARY -->
                         <form th:action="@{/deleteStudent/{id}(id=${student.id})}" method="post" 
@@ -81,10 +91,10 @@
                 </tr>
             </tbody>
         </table>
+
+        <a href="/secretaries/index" class="home-button">Home</a>
     </div>
 </div>
-
-<a href="/secretaries/index" class="btn btn-link">Home</a>
 
 </body>
 </html>
