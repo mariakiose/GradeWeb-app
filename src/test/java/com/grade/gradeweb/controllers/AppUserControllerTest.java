@@ -40,7 +40,7 @@ public class AppUserControllerTest {
     @Test
     @WithMockUser(username = "test@example.com", roles = "USER")
     public void testStudentsProfile() throws Exception {
-        when(userService.getUser("test@example.com")).thenReturn(mockUser);
+        when(userService.findByEmail("test@example.com")).thenReturn(mockUser);
 
         mockMvc.perform(get("/profile"))
                 .andExpect(status().isOk())

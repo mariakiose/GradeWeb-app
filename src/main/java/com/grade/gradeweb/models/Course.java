@@ -18,7 +18,9 @@ public class Course {
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Student> students = new ArrayList<>();
-   
+    
+    private boolean active = true; 
+
     public Course() {
     }
     public void removeStudent(Student student) {
@@ -72,6 +74,13 @@ public class Course {
 		this.students.remove(students);
 	}
 	
-	
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
     
 }

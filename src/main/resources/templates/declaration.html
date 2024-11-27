@@ -59,7 +59,7 @@
 <body>
     <h1>Declare Courses</h1>
     <form id="declareForm" th:action="@{/preview}" method="post" onsubmit="return validateForm()">
-        <div th:each="course : ${courses}" class="checkbox-label">
+        <div th:each="course : ${active_courses}" class="checkbox-label">
             <label th:for="${'course-' + course.id}" th:text="${course.courseName}">Course Name</label>
             <input type="checkbox" th:value="${course.id}" th:name="courseIds" th:id="${'course-' + course.id}" />
         </div>

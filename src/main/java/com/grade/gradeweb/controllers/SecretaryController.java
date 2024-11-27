@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.grade.gradeweb.models.Student;
 import com.grade.gradeweb.models.Course;
 import com.grade.gradeweb.models.Grade;
+import com.grade.gradeweb.services.CourseService;
 import com.grade.gradeweb.services.GradeService;
 import com.grade.gradeweb.services.StudentService;
 
@@ -27,12 +28,15 @@ public class SecretaryController {
     
     @Autowired
     private GradeService gradeService;
+    @Autowired
+    private CourseService courseService;
    
     @GetMapping(value = { "/secretaries/index" })
 	public String studentIndex() {
         return "secretaries/index"; 
     }
 	
+    
     @GetMapping("/students")
     public String showStudents(Model model) {
         List<Student> students = studentService.findAllStudents();
@@ -85,4 +89,32 @@ public class SecretaryController {
 
 
     }
+    
+    @GetMapping("/courses_secretary")
+    public String getCourses(Model model) {
+        List<Course> courses = courseService.findAllActiveCourses(); 
+        model.addAttribute("courses_secretary", courses);
+        return "courses_secretary";
+    }
+
+    @PostMapping("/addCourse")
+    public String addCourse(@RequestParam String courseName) {
+        Course newCourse = new Course();
+        newCourse.setCourseName(courseName);  
+        newCourse.setActive(true);  
+
+        courseService.saveCourse(newCourse);  
+        return "redirect:/courses_secretary";  
+    }
+
+    @PostMapping("/secretaries/disableCourse/{id}")
+    public String disableCourse(@PathVariable("id") Long courseId) {
+        courseService.disableCourse(courseId); 
+        return "redirect:/courses_secretary";
+    }
+    
+
+
+
+
   }

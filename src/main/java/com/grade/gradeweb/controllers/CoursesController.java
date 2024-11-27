@@ -20,6 +20,7 @@ public class CoursesController {
     public List<Course> getCourses() {
         return courseService.findAllCources();
     }
+   
 
     @GetMapping("/courses/selected")
     public List<Course> getCoursesByIds(@RequestParam List<Long> courseIds) {

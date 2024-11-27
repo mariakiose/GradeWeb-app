@@ -53,4 +53,24 @@ public class CourseService {
         }
         return Collections.emptyList(); 
     }
+    
+    public void saveCourse(Course course) {
+        courseRepository.save(course); 
+    }
+
+    public List<Course> findAllActiveCourses() {
+        return courseRepository.findActiveCourses(); 
+    }
+
+    public boolean disableCourse(Long courseId) {
+        Course course = courseRepository.findById(courseId).orElse(null);
+        if (course != null) {
+            course.setActive(false); 
+            courseRepository.save(course);
+            return true;
+        }
+        return false; 
+    }
+
+      
 }

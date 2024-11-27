@@ -31,7 +31,7 @@ public class Student extends AppUser {
         this.setPassword(password);
         this.setAddress(address);
         this.setPhone(phone);
-        this.setRole("STUDENT"); // Setting the role specifically for Student
+        this.setRole("STUDENT"); 
     }
 
     public Student() {

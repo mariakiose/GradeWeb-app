@@ -22,7 +22,7 @@ public class AppUserController {
 	  public String studentsProfile(Model model) {
 	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-	        AppUser user = userService.getUser(userDetails.getUsername());
+	        AppUser user = userService.findByEmail(userDetails.getUsername());
 	        model.addAttribute("user", user);
 	        return "profile";
 	    }	
