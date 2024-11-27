@@ -28,7 +28,7 @@ The primary purpose of the application is to streamline the management of studen
            Grade Input: Secretary staff can enter grades for each student and each course.
            Delete Students: Secretary staff can delete students if they are no longer needed.
            Add Courses: Secretary staff can add new courses.
-           Non Active Courses: Secretary staff can make the courses inactive if they are not in the study program anymore.
+           Ιnactive Courses: Secretary staff can make the courses inactive if they are not in the study program anymore.
 
 
 # User Instructions
