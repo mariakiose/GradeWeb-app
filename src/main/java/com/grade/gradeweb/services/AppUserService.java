@@ -58,9 +58,7 @@ public class AppUserService implements UserDetailsService {
         return user;
     }
     
-   // public AppUser getUser(String email) {
-    //    return appUserRepository.findByEmail(email);
-//    }
+  
     public void createUser(AppUser newUser, String role) {
 
         if ("STUDENT".equals(role)) {

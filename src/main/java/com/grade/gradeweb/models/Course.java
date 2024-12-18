@@ -33,8 +33,8 @@ public class Course {
         this.id = id;
         this.courseName = courseName;
     }
-    public Course( String courseName,Secretary secretary) {
-        this.secretary = secretary;
+    public Course( String courseName) {//,Secretary secretary) {
+        //this.secretary = secretary;
         this.courseName = courseName;
     }
 	public Long getId() {

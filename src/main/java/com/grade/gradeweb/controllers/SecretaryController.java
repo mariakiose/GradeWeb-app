@@ -28,6 +28,7 @@ public class SecretaryController {
     
     @Autowired
     private GradeService gradeService;
+    
     @Autowired
     private CourseService courseService;
    
@@ -73,10 +74,15 @@ public class SecretaryController {
                 return "student_cources";
             }
             Optional<Grade> gradeOpt = gradeService.findById(id);
+            if (!gradeOpt.isPresent()) {
+                model.addAttribute("errorMessage", "Grade not found.");
+                return "redirect:/student/" + studentId;
+            }
             gradeService.saveGrade(gradeOpt, gradeValue);
         }
         return "redirect:/student/" + studentId;
     }
+    
 
     @PostMapping("/deleteStudent/{id}")
     public String deleteStudent(@PathVariable Long id) {
@@ -99,7 +105,10 @@ public class SecretaryController {
 
     @PostMapping("/addCourse")
     public String addCourse(@RequestParam String courseName) {
-        Course newCourse = new Course();
+    	 if (courseName.isEmpty()) {
+    	    return "redirect:/courses_secretary";
+    	 }
+    	Course newCourse = new Course();
         newCourse.setCourseName(courseName);  
         newCourse.setActive(true);  
 

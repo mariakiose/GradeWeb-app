@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import com.grade.gradeweb.models.Course;
 import com.grade.gradeweb.models.Grade;
 import com.grade.gradeweb.models.Student;
+import com.grade.gradeweb.services.CourseService;
 import com.grade.gradeweb.services.GradeService;
 import com.grade.gradeweb.services.StudentService;
 
@@ -25,6 +26,10 @@ public class SecretaryControllerTest {
 
     @Mock
     private GradeService gradeService;
+    
+    @Mock
+    private CourseService courseService;
+
 
     @Mock
     private Model model;
@@ -45,15 +50,12 @@ public class SecretaryControllerTest {
 
     @Test
     public void testShowStudents() {
-        // Test data
         List<Student> students = Arrays.asList(new Student(), new Student());
 
         when(studentService.findAllStudents()).thenReturn(students);
 
-        // Execute the method
         String viewName = secretaryController.showStudents(model);
 
-        // Verify the results
         assertEquals("students", viewName);
         verify(model).addAttribute("students", students);
     }
@@ -89,7 +91,7 @@ public class SecretaryControllerTest {
     @Test
     public void testUpdateGrade() {
         Long gradeId = 1L;
-        Float gradeValue = 8.0F;  // Valid grade
+        Float gradeValue = 8.0F; 
         Long studentId = 2L;
 
         Grade grade = new Grade();
@@ -116,7 +118,7 @@ public class SecretaryControllerTest {
     @Test
     public void testUpdateGrade_InvalidGradeValue() {
         Long gradeId = 1L;
-        Float invalidGradeValue = 15.0F;  // Invalid grade
+        Float invalidGradeValue = 15.0F;  
         Long studentId = 2L;
 
         String viewName = secretaryController.updateGrade(gradeId, invalidGradeValue, studentId, model);
@@ -129,7 +131,7 @@ public class SecretaryControllerTest {
     @Test
     public void testUpdateGrade_GradeNotFound() {
         Long gradeId = 1L;
-        Float gradeValue = 8.0F;  // Valid grade
+        Float gradeValue = 8.0F;  
         Long studentId = 2L;
 
         when(gradeService.findById(gradeId)).thenReturn(Optional.empty());
@@ -138,5 +140,72 @@ public class SecretaryControllerTest {
 
         assertEquals("redirect:/student/" + studentId, viewName);
         verify(model).addAttribute("errorMessage", "Grade not found.");
+    }  
+    
+    @Test
+    public void testDeleteStudent() {
+        Long studentId = 1L;
+        Student student = new Student();
+        when(studentService.findById(studentId)).thenReturn(Optional.of(student));
+
+        String viewName = secretaryController.deleteStudent(studentId);
+
+        assertEquals("redirect:/students", viewName);
+        verify(studentService).deleteStudent(studentId);
     }
+
+    @Test
+    public void testDeleteStudent_StudentNotFound() {
+        Long studentId = 1L;
+
+        when(studentService.findById(studentId)).thenReturn(Optional.empty());
+
+        String viewName = secretaryController.deleteStudent(studentId);
+
+        assertEquals("redirect:/students", viewName);
+        verify(studentService, never()).deleteStudent(studentId);
+    }
+
+    @Test
+    public void testGetCourses() {
+        List<Course> courses = Arrays.asList(new Course(), new Course());
+        when(courseService.findAllActiveCourses()).thenReturn(courses);
+
+        String viewName = secretaryController.getCourses(model);
+
+        assertEquals("courses_secretary", viewName);
+        verify(model).addAttribute("courses_secretary", courses);
+    }
+
+    @Test
+    public void testAddCourse() {
+        String courseName = "New Course";
+
+        String viewName = secretaryController.addCourse(courseName);
+
+        assertEquals("redirect:/courses_secretary", viewName);
+        verify(courseService).saveCourse(any(Course.class)); 
+    }
+
+    @Test
+    public void testDisableCourse() {
+        Long courseId = 1L;
+
+        String viewName = secretaryController.disableCourse(courseId);
+
+        assertEquals("redirect:/courses_secretary", viewName);
+        verify(courseService).disableCourse(courseId);
+    }
+
+    @Test
+    public void testAddCourse_EmptyCourseName() {
+        String courseName = "";
+
+        String viewName = secretaryController.addCourse(courseName);
+
+        assertEquals("redirect:/courses_secretary", viewName);
+        verify(courseService, never()).saveCourse(any(Course.class)); 
+    }
+
+    
 }

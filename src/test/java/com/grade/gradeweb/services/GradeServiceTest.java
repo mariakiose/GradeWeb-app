@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,22 +32,19 @@ public class GradeServiceTest {
 
     @Test
     void testFindGradesByStudent_success() {
-        // Arrange
         Student student = new Student();
         Grade grade1 = new Grade();
         Grade grade2 = new Grade();
         Grade grade3 = new Grade();
         grade1.setStudent(student);
         grade2.setStudent(student);
-        grade3.setStudent(new Student()); // different student
+        grade3.setStudent(new Student()); 
 
         List<Grade> allGrades = Stream.of(grade1, grade2, grade3).collect(Collectors.toList());
         when(gradeRepository.findAll()).thenReturn(allGrades);
 
-        // Act
         List<Grade> result = gradeService.findGradesByStudent(student);
 
-        // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
         assertTrue(result.contains(grade1));
@@ -56,33 +54,55 @@ public class GradeServiceTest {
 
     @Test
     void testFindGradesByStudent_noGradesForStudent() {
-        // Arrange
         Student student = new Student();
         Grade grade = new Grade();
-        grade.setStudent(new Student()); // different student
+        grade.setStudent(new Student()); 
 
         List<Grade> allGrades = List.of(grade);
         when(gradeRepository.findAll()).thenReturn(allGrades);
 
-        // Act
         List<Grade> result = gradeService.findGradesByStudent(student);
 
-        // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
+    }
+
+
+    @Test
+    void testFindById_success() {
+        Grade grade = new Grade();
+        grade.setId(1L);
+        when(gradeRepository.findById(1L)).thenReturn(Optional.of(grade));
+
+        Optional<Grade> result = gradeService.findById(1L);
+
+        assertTrue(result.isPresent());
+        assertEquals(grade, result.get());
     }
 
     @Test
-    void testFindGradesByStudent_noGrades() {
-        // Arrange
-        Student student = new Student();
-        when(gradeRepository.findAll()).thenReturn(List.of());
+    void testFindById_notFound() {
+        when(gradeRepository.findById(1L)).thenReturn(Optional.empty());
 
-        // Act
-        List<Grade> result = gradeService.findGradesByStudent(student);
+        Optional<Grade> result = gradeService.findById(1L);
 
-        // Assert
-        assertNotNull(result);
         assertTrue(result.isEmpty());
     }
+
+  
+    @Test
+    void testSaveGrade_success() {
+        Grade grade = new Grade();
+        grade.setId(1L);
+        grade.setGradeValue(0.0f);
+        Optional<Grade> gradeOpt = Optional.of(grade);
+        Float gradeValue = 8.0f;
+
+        gradeService.saveGrade(gradeOpt, gradeValue);
+
+        assertEquals(gradeValue, grade.getGradeValue(), 0.0001, "The grade value should be updated to the new value.");
+        verify(gradeRepository, times(1)).save(grade); 
+    }
+
+
 }

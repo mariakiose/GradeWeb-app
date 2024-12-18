@@ -42,8 +42,8 @@ public class AccountControllerTest {
 
     @Test
     public void testRegister_EmailAlreadyUsed() {
-        // Test data
-        RegisterDto registerDto = new RegisterDto();
+
+    	RegisterDto registerDto = new RegisterDto();
         registerDto.setEmail("existing@example.com");
         registerDto.setPassword("password123");
         registerDto.setConfirmPassword("password123");
@@ -51,14 +51,11 @@ public class AccountControllerTest {
         registerDto.setLastName("Jonas");
         registerDto.setRole("STUDENT");
 
-        // Simulate an existing user with the same email
         AppUser existingUser = new AppUser();
         when(appUserService.findByEmail(registerDto.getEmail())).thenReturn(existingUser);
 
-        // Execute the method
         String viewName = accountController.register(registerDto, bindingResult, model, redirectAttributes);
 
-        // Verify that the view returned is "register" and that error messages have been added
         assertEquals("register", viewName);
         verify(bindingResult).addError(any());
         verify(model).addAttribute("success", false);
@@ -67,7 +64,6 @@ public class AccountControllerTest {
 
     @Test
     public void testRegister_PasswordsDoNotMatch() {
-        // Test data
         RegisterDto registerDto = new RegisterDto();
         registerDto.setEmail("newuser@example.com");
         registerDto.setPassword("password123");
@@ -76,10 +72,8 @@ public class AccountControllerTest {
         registerDto.setLastName("Jane");
         registerDto.setRole("STUDENT");
 
-        // Execute the method
         String viewName = accountController.register(registerDto, bindingResult, model, redirectAttributes);
 
-        // Verify that the view returned is "register" and that error messages have been added
         assertEquals("register", viewName);
         verify(bindingResult).addError(any());
         verify(model).addAttribute("success", false);

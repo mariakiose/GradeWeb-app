@@ -22,8 +22,6 @@ public class CourseServiceTest {
 
     @InjectMocks
     private CourseService courseService;
-    
-    
 
     @Mock
     private CourseRepository courseRepository;
@@ -37,81 +35,127 @@ public class CourseServiceTest {
     }
 
     @Test
-    void testGetCourses_success() {
-        // Arrange
-        Course course1 = new Course("random_course1", null);
-        Course course2 = new Course("random_course2", null);
+    void testFindAllCources() {
+        Course course1 = new Course();
+        Course course2 = new Course();
         List<Course> courses = List.of(course1, course2);
         when(courseRepository.findAll()).thenReturn(courses);
 
-        // Act
         List<Course> result = courseService.findAllCources();
 
-        // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
         assertTrue(result.contains(course1));
         assertTrue(result.contains(course2));
+        verify(courseRepository, times(1)).findAll();
     }
 
     @Test
-    void testGetCoursesByIds_success() {
-        // Arrange
-        Course course1 = new Course("random_course1", null);
-        Course course2 = new Course("random_course2", null);
-        List<Course> courses = List.of(course1, course2);
-        List<Long> ids = List.of(1L, 2L);
-        when(courseRepository.findAllById(ids)).thenReturn(courses);
+    void testFindById() {
+        
+        Course course = new Course();
+        when(courseRepository.findById(1L)).thenReturn(Optional.of(course));
 
-        // Act
-        List<Course> result = courseService.getCoursesByIds(ids);
+        Course result = courseService.findById(1L);
 
-        // Assert
         assertNotNull(result);
-        assertEquals(2, result.size());
-        assertTrue(result.contains(course1));
-        assertTrue(result.contains(course2));
+        assertEquals(course, result);
+        verify(courseRepository, times(1)).findById(1L);
     }
 
     @Test
-    void testSaveSelectedCourses_success() {
-        // Arrange
-        List<Long> ids = List.of(1L, 2L);
+    void testFindById_NotFound() {
+        when(courseRepository.findById(1L)).thenReturn(Optional.empty());
 
-        // Act
+        Course result = courseService.findById(1L);
+
+        assertNull(result);
+        verify(courseRepository, times(1)).findById(1L);
+    }
+
+
+    @Test
+    void testSaveSelectedCourses() {
+        List<Long> ids = List.of(1L, 2L);
+        when(courseRepository.findAllById(ids)).thenReturn(new ArrayList<>());
+
         courseService.saveSelectedCourses(ids);
 
-        // Assert
         verify(courseRepository, times(1)).findAllById(ids);
     }
 
     @Test
-    void testGetSelectedCourses_studentFound() {
-        // Arrange
-        Course course = new Course("random_course1", null);
+    void testGetSelectedCourses_StudentFound() {
+        Course course = new Course();
+        course.setCourseName("Networks");
         Student student = new Student();
-        student.setCourses(Collections.singletonMap(course, null)); // Add sample grade
+        student.setCourses(Collections.singletonMap(course, null));
         when(studentRepository.findByEmail("test@example.com")).thenReturn(student);
 
-        // Act
         List<Course> result = courseService.getSelectedCourses("test@example.com");
 
-        // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("random_course1", result.get(0).getCourseName());
+        assertEquals("Networks", result.get(0).getCourseName());
+        verify(studentRepository, times(1)).findByEmail("test@example.com");
     }
 
     @Test
-    void testGetSelectedCourses_studentNotFound() {
-        // Arrange
+    void testGetSelectedCourses_StudentNotFound() {
         when(studentRepository.findByEmail("test@example.com")).thenReturn(null);
 
-        // Act
         List<Course> result = courseService.getSelectedCourses("test@example.com");
 
-        // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
+        verify(studentRepository, times(1)).findByEmail("test@example.com");
+    }
+
+    @Test
+    void testSaveCourse() {
+        Course course = new Course();
+
+        courseService.saveCourse(course);
+
+        verify(courseRepository, times(1)).save(course);
+    }
+
+    @Test
+    void testFindAllActiveCourses() {
+        Course course1 = new Course();
+        Course course2 = new Course();
+        List<Course> activeCourses = List.of(course1, course2);
+        when(courseRepository.findActiveCourses()).thenReturn(activeCourses);
+
+        List<Course> result = courseService.findAllActiveCourses();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(courseRepository, times(1)).findActiveCourses();
+    }
+
+    @Test
+    void testDisableCourse_CourseFound() {
+        Course course = new Course();
+        course.setActive(true);
+        when(courseRepository.findById(1L)).thenReturn(Optional.of(course));
+
+        boolean result = courseService.disableCourse(1L);
+
+        assertTrue(result);
+        assertFalse(course.getActive());
+        verify(courseRepository, times(1)).findById(1L);
+        verify(courseRepository, times(1)).save(course);
+    }
+
+    @Test
+    void testDisableCourse_CourseNotFound() {
+        when(courseRepository.findById(1L)).thenReturn(Optional.empty());
+
+        boolean result = courseService.disableCourse(1L);
+
+        assertFalse(result);
+        verify(courseRepository, times(1)).findById(1L);
+        verify(courseRepository, times(0)).save(any(Course.class));
     }
 }
